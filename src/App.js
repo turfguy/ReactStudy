@@ -9,6 +9,9 @@ function App() {
   let [글제목,글제목변경] = useState(['남자 코트 추천','강남 우동 맛집','파이썬 독학']);
   let [따봉,따봉변경] = useState([0,0,0]);
   let [modal,setModal] = useState(false);
+  let [title, setTitle] = useState(0);
+  let [입력값, 입력값변경] = useState('');
+  
   let logo = 'ReactBlog';
   return (
     <div className="App">
@@ -30,10 +33,10 @@ function App() {
         {
           글제목.map(function(a,i){
             return(
-              <>
+              
                 <div className= "list" key={i}>
                   <h4 onClick={()=>{
-                    setModal(!modal)
+                    setModal(!modal); setTitle(i);
                   }}>
                     {글제목[i]}
                   </h4>
@@ -44,28 +47,49 @@ function App() {
                     }}>    
                     ❤️</span> {따봉[i]}
                   <p>5월 3일 글임</p>
+                  <button onClick={()=>{
+                     let del = [...글제목];
+                     del.splice(i,1);
+                     글제목변경(del); 
+                  }}>삭제</button>
               </div>
-              <div>
-              {
-                modal == true ? <Modal/> : null
-              }
-              </div>
-            </>  
-        
             )
           })
         }
+        <br></br>
+        <input type="text" onChange={(e)=>{
+            입력값변경(e.target.value); 
+               
+        }}/>
+        <button  onClick={(e)=>{
+            let input = [...글제목];
+            input.push(입력값);
+            글제목변경(input);
+            console.log(입력값);
+        }}>입력</button>
+        <div>
+              {
+                modal == true ? <Modal  글제목={글제목} 글제목변경={글제목변경} title={title}/> : null
+              }
+              </div>
+            
       </div>
       
   );
 }
-function Modal(){
+function Modal(props){
   return(
-    <div className='modal'>
-        <h4>상세페이지</h4>
-        <p>날짜</p>
-        <p>상세내용</p>
-    </div>
+     
+     <div className='modal' >
+            <h4>{props.글제목[props.title]}</h4>
+            <p>날짜</p>
+            <p>상세내용</p>
+            <button>
+              글수정
+            </button>
+        </div>
+
+     
   )
 }
 export default App;
